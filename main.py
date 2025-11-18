@@ -22,7 +22,7 @@ models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
-# RESTful Endpoints
+# Test Plan Endpoints
 
 # Gets all test plans
 @app.get("/api/plans", response_model=List[models.TestPlan])
@@ -42,6 +42,24 @@ def read_plan(plan_id: int, db: Session = Depends(database.get_db)):
     if db_plan is None:
         raise HTTPException(status_code = 404, detail = "Test Plan not found")
     return db_plan
+
+# Updates existing test plan details
+@app.put("/api/plans/{plan_id}", response_model=models.TestPlan)
+def update_plan(plan_id: int, plan: models.TestPlanUpdate, db: Session = Depends(database.get_db)):
+    db_plan = crud.update_plan(db, plan_id=plan_id, plan=plan)
+    if db_plan is None:
+        raise HTTPException(status_code = 404, detail = "Test Plan not found")
+    return db_plan
+
+# Deletes a test plan by ID
+@app.delete("/api/plans/{plan_id}", response_model=models.TestPlan)
+def delete_plan(plan_id: int, db: Session = Depends(database.get_db)):
+    db_plan = crud.delete_plan(db, plan_id=plan_id)
+    if db_plan is None:
+        raise HTTPException(status_code = 404, detail = "Test Plan not found")
+    return db_plan
+
+# Test Step Endpoints
 
 # Creates a new test step for a test plan
 @app.post("/api/plans/{plan_id}/steps", response_model=models.TestStep)

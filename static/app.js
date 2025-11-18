@@ -103,11 +103,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Choose a plan from plan list
     planList.addEventListener('click', (event) => {
-        if (event.target.tagName === 'LI') {
-            const id = event.target.dataset.id;
+        const li = event.target.closest('li');
+        if (li && planList.contains(li)) {
+            const id = li.dataset.id;
             if (id !== selectedPlanId) {
                 setActivePlan(id);
             }
+        }
+    });
+
+    // Save button for plan details
+    savePlanBtn.addEventListener('click', async () => {
+        if (!selectedPlanId){
+            return;
+        }
+
+        const updatedPlan = {
+            title: planTitleInput.value,
+            description: planDescInput.value
+        };
+        try {
+            const response = await fetch(`/api/plans/${selectedPlanId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedPlan)
+            });
+            if (!response.ok) throw new Error('Failed to save plan');
+
+            // Update title in list of plans
+            const activeLi = planList.querySelector(`li[data-id="${selectedPlanId}"]`);
+            if (activeLi) {
+                activeLi.textContent = updatedPlan.title;
+            }
+        }
+        catch (error) {
+            console.error('Error saving plan:', error);
+        }
+    });
+
+    // Delete plan button
+    deletePlanBtn.addEventListener('click', async () => {
+        if (!selectedPlanId){
+            return;
+        }
+
+        // Popup confirmation to delete
+        if (!confirm('Are you sure you want to delete this test plan?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/plans/${selectedPlanId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error('Failed to delete plan');
+
+            await loadAllPlans();
+            showHome();
+
+        }
+        catch (error) {
+            console.error('Error deleting plan:', error);
         }
     });
 
