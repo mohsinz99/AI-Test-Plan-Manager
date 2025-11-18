@@ -81,3 +81,9 @@ class TestPlan(TestPlanBase):
 
     class Config:
         from_attributes = True
+
+class AIRequest(BaseModel):
+    text: str
+
+class AISuggestions(BaseModel):
+    suggestions: List[str]

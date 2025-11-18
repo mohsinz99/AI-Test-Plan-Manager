@@ -12,10 +12,24 @@ from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from typing import List
+import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
 import crud
 import models
 import db as database
+
+load_dotenv()
+api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    print("WARNING: GOOGLE_API_KEY not found. AI feature will not be functional.")
+else:
+    try:
+        genai.configure(api_key=api_key)
+    except Exception as e:
+        print(f"Error Gemini API: {e}")
 
 # creates db tables
 models.Base.metadata.create_all(bind=database.engine)
@@ -84,6 +98,44 @@ def delete_step(step_id: int, db: Session = Depends(database.get_db)):
     if db_step is None:
         raise HTTPException(status_code = 404, detail = "Test Step not found")
     return "Test Step deleted"
+
+# AI Test Step Gen Endpoint
+@app.post("/api/generate-steps", response_model = models.AISuggestions)
+async def generate_steps(request: models.AIRequest):
+    if not api_key:
+        raise HTTPException(status_code = 500, detail = "AI service not configured. Missing API key.")
+
+    try:
+        model = genai.GenerativeModel('gemini-flash-latest')
+        
+        prompt = f"""
+        You are a QA (Quality Assurance) expert. Your task is to generate a list of test steps based on the following requirements.
+        
+        Provide *only* a list of test steps. Do not add any preamble, explanation, or conversation.
+        
+        Format your response as a simple list, with each test step on a new line.
+        Start each step with "Verify".
+        
+        Requirements:
+        {request.text}
+        
+        Test Steps:
+        """
+        
+        response = await model.generate_content_async(prompt)
+        text_response = response.text
+        suggestions = []
+        if text_response:
+            lines = text_response.split('\n')
+            for line in lines:
+                trimmed_line = line.strip().lstrip('*- ')
+                if trimmed_line and trimmed_line.lower().startswith('verify'):
+                    suggestions.append(trimmed_line)
+        
+        return models.AISuggestions(suggestions=suggestions)
+    except Exception as e:
+        print(f"Gemini API error: {e}")
+        raise HTTPException(status_code = 500, detail = f"Error generating AI suggestions: {str(e)}")
 
 @app.get("/")
 def read_root():
