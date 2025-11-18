@@ -1,0 +1,68 @@
+<!-- 
+Author: Mohsin Zaidi
+Date: 2025-11-17
+Version: 1.0.0
+Description: Main HTML file for the Test Plan Manager frontend.
+ -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Plan Manager</title>
+    
+    <!-- Adds styling from pico css -->
+    <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"/>
+    <link rel = "stylesheet" href="/static/style.css"/>
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+
+    <header class = "navbar" style = "background-color: #3c6d9e; color: white; padding: 1rem;">
+        <h1>Test Plan Manager</h1>
+    </header>
+
+    <main class = "main-layout" style = "display: flex; gap: 1.5rem; padding: 1.5rem;">
+
+        <article class = "sidebar-left" style = "flex: 1;">
+            <div class = "sidebar-header" style = "display: flex; justify-content: space-between; align-items: center;">
+                <h2>Test Plans</h2>
+                <button id = "new-plan-btn">+</button>
+            </div>
+            <ul id = "plan-list"> </ul>
+        </article>
+
+        <article class = "main-content" style = "flex: 2;">
+            
+            <div id = "center-message" style = "text-align: center;">
+                <h2>Select a test plan or create a new one.</h2>
+            </div>
+
+            <!-- Test step UI when inside a test plan -->
+            <div id = "plan-details" class = "hidden">
+                <label for = "plan-title">Name</label>
+                <input type = "text" id = "plan-title" placeholder = "Test Plan Name">
+                
+                <label for = "plan-desc">Description</label>
+                <textarea id = "plan-desc" placeholder = "Test Plan Description"></textarea>
+
+                <div class = "button-group" style = "display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button id = "save-plan-btn">Save</button>
+                    <button id = "delete-plan-btn" class = "contrast">Delete Plan</button>
+                </div>
+                <hr>
+                <h3>Testing Steps</h3>
+            </div>
+
+        </article>
+
+        <article class = "sidebar-right" style="flex: 1;">
+            <h2>AI Step Generator</h2>
+        </article>
+
+    </main>
+
+</body>
+</html>

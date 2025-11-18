@@ -3,12 +3,11 @@ Author: Mohsin Zaidi
 Date: 2025-11-17
 Version: 1.0.0
 Description: CRUD operations for the AI Test Plan Manager application.
-
 '''
 
 
-
 from sqlalchemy.orm import Session
+
 import models
 
 # Get a single test plan by ID
@@ -16,7 +15,7 @@ def get_plan(db: Session, plan_id: int):
     return db.query(models.DBTestPlan).filter(models.DBTestPlan.id == plan_id).first()
 
 # Gets first 15 test plans
-def get_plans(db: Session, limit: int = 15):
+def get_plans(db: Session, limit: int = 30):
     return db.query(models.DBTestPlan).limit(limit).all()
 
 # Adds new test plan to db

@@ -1,0 +1,53 @@
+/* 
+Author: Mohsin Zaidi
+Date: 2025-11-17
+Version: 1.0.0
+Description: CSS file for the Test Plan Manager frontend.
+ */
+
+/* Adjusting site sizing */
+html{
+    font-size: 75%;
+}
+
+.main-layout {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height: calc(100vh - 80px);
+    max-width: none;
+}
+
+.sidebar-left {
+    flex: 1;
+}
+.main-content {
+    flex: 2;
+}
+.sidebar-right {
+    flex: 1;
+}
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}
+
+#plan-list {
+    list-style: none;
+    padding: 0;
+}
+#plan-list li {
+    padding: 0.75rem 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#plan-list li.active {
+    background-color: #8abdf4;
+    color: white;
+}
