@@ -22,7 +22,7 @@ models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
-# RESTful Endpoints
+# Test Plan Endpoints
 
 # Gets all test plans
 @app.get("/api/plans", response_model=List[models.TestPlan])
@@ -43,6 +43,24 @@ def read_plan(plan_id: int, db: Session = Depends(database.get_db)):
         raise HTTPException(status_code = 404, detail = "Test Plan not found")
     return db_plan
 
+# Updates existing test plan details
+@app.put("/api/plans/{plan_id}", response_model=models.TestPlan)
+def update_plan(plan_id: int, plan: models.TestPlanUpdate, db: Session = Depends(database.get_db)):
+    db_plan = crud.update_plan(db, plan_id=plan_id, plan=plan)
+    if db_plan is None:
+        raise HTTPException(status_code = 404, detail = "Test Plan not found")
+    return db_plan
+
+# Deletes a test plan by ID
+@app.delete("/api/plans/{plan_id}", response_model=models.TestPlan)
+def delete_plan(plan_id: int, db: Session = Depends(database.get_db)):
+    db_plan = crud.delete_plan(db, plan_id=plan_id)
+    if db_plan is None:
+        raise HTTPException(status_code = 404, detail = "Test Plan not found")
+    return db_plan
+
+# Test Step Endpoints
+
 # Creates a new test step for a test plan
 @app.post("/api/plans/{plan_id}/steps", response_model=models.TestStep)
 def create_step_for_plan(plan_id: int, step: models.TestStepCreate, db: Session = Depends(database.get_db)):
@@ -50,6 +68,22 @@ def create_step_for_plan(plan_id: int, step: models.TestStepCreate, db: Session 
     if db_plan is None:
         raise HTTPException(status_code=404, detail="Test Plan not found")
     return crud.create_plan_step(db=db, step=step, plan_id=plan_id)
+
+# Updates existing test step
+@app.put("/api/steps/{step_id}", response_model = models.TestStep)
+def update_step(step_id: int, step: models.TestStepUpdate, db: Session = Depends(database.get_db)):
+    db_step = crud.update_step(db, step_id = step_id, step = step)
+    if db_step is None:
+        raise HTTPException(status_code = 404, detail="Test Step not found")
+    return db_step
+
+# Deletes a test step by ID
+@app.delete("/api/steps/{step_id}")
+def delete_step(step_id: int, db: Session = Depends(database.get_db)):
+    db_step = crud.delete_step(db, step_id = step_id)
+    if db_step is None:
+        raise HTTPException(status_code = 404, detail = "Test Step not found")
+    return "Test Step deleted"
 
 @app.get("/")
 def read_root():
