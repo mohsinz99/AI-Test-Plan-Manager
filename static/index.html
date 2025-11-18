@@ -39,6 +39,23 @@ Description: Main HTML file for the Test Plan Manager frontend.
             <div id = "center-message" style = "text-align: center;">
                 <h2>Select a test plan or create a new one.</h2>
             </div>
+
+            <!-- Test step UI when inside a test plan -->
+            <div id = "plan-details" class = "hidden">
+                <label for = "plan-title">Name</label>
+                <input type = "text" id = "plan-title" placeholder = "Test Plan Name">
+                
+                <label for = "plan-desc">Description</label>
+                <textarea id = "plan-desc" placeholder = "Test Plan Description"></textarea>
+
+                <div class = "button-group" style = "display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button id = "save-plan-btn">Save</button>
+                    <button id = "delete-plan-btn" class = "contrast">Delete Plan</button>
+                </div>
+                <hr>
+                <h3>Testing Steps</h3>
+            </div>
+
         </article>
 
         <article class = "sidebar-right" style="flex: 1;">
