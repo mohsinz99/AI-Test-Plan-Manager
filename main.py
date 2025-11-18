@@ -9,6 +9,8 @@ Description: Main application file for the AI Test Plan Manager using FastAPI.
 
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from typing import List
 
 import crud
@@ -48,3 +50,9 @@ def create_step_for_plan(plan_id: int, step: models.TestStepCreate, db: Session 
     if db_plan is None:
         raise HTTPException(status_code=404, detail="Test Plan not found")
     return crud.create_plan_step(db=db, step=step, plan_id=plan_id)
+
+@app.get("/")
+def read_root():
+    return FileResponse('static/index.html')
+
+app.mount("/static", StaticFiles(directory = "static"), name = "static")

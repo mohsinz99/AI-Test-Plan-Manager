@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Plan Manager</title>
+    
+    <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"/>
+    <link rel = "stylesheet" href="/static/style.css"/>
+</head>
+<body>
+
+    <header class = "navbar" style = "background-color: #3c6d9e; color: white; padding: 1rem;">
+        <h1>Test Plan Manager</h1>
+    </header>
+
+    <main class = "main-layout" style = "display: flex; gap: 1.5rem; padding: 1.5rem;">
+
+        <article class = "sidebar-left" style = "flex: 1;">
+            <div class = "sidebar-header" style = "display: flex; justify-content: space-between; align-items: center;">
+                <h2>Test Plans</h2>
+                <button id = "new-plan-btn">+</button>
+            </div>
+            <ul id = "plan-list"> </ul>
+        </article>
+
+        <article class = "main-content" style = "flex: 2;">
+            
+            <div id = "center-message" style = "text-align: center;">
+                <h2>Select a test plan or create a new one.</h2>
+            </div>
+        </article>
+
+        <article class = "sidebar-right" style="flex: 1;">
+            <h2>AI Step Generator</h2>
+        </article>
+
+    </main>
+
+</body>
+</html>
