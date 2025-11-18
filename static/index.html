@@ -62,14 +62,19 @@ Description: Main HTML file for the Test Plan Manager frontend.
                     <button id = "add-step-btn">Add Step</button>
                 </div>
             </div>
-
         </article>
 
+        <!-- AI Step Gen UI -->
         <article class = "sidebar-right" style="flex: 1;">
             <h2>AI Step Generator</h2>
+            <div id="ai-generator" class="disabled">
+                <p>Please paste your test requirements:</p>
+                <label for="ai-doc-input" class="hidden">Requirements Document</label>
+                <textarea id="ai-doc-input" rows="10"></textarea>
+                <button id="ai-generate-btn">Generate</button>
+                <div id="ai-suggestions"></div>
+            </div>
         </article>
-
     </main>
-
 </body>
 </html>

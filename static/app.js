@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepList = document.getElementById('step-list');
     const newStepInput = document.getElementById('new-step-input');
     const addStepBtn = document.getElementById('add-step-btn');
+    const aiGenerator = document.getElementById('ai-generator');
+    const aiDocInput = document.getElementById('ai-doc-input');
+    const aiGenerateBtn = document.getElementById('ai-generate-btn');
+    const aiSuggestions = document.getElementById('ai-suggestions');
 
     let selectedPlanId = null;
 
@@ -288,6 +292,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    loadAllPlans();
+    aiGenerateBtn.addEventListener('click', async () => {
+        const text = aiDocInput.value;
+        if (!text){
+            return;
+        }
 
+        // // Clear previous suggestions
+        aiSuggestions.innerHTML = 'Generating suggestions...';
+
+        try {
+            const response = await fetch('/api/generate-steps', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            });
+            if (!response.ok) throw new Error('Failed to generate steps');
+
+            const data = await response.json();
+            aiSuggestions.innerHTML = '<ul></ul>';
+            const ul = aiSuggestions.querySelector('ul');
+            data.suggestions.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${suggestion}</span>
+                    <button class="add-suggestion-btn">Add</button>`;
+                ul.appendChild(li);
+            });
+
+        }
+        catch (error) {
+            console.error('Error AI generating steps:', error);
+        }
+    });
+
+    // Add AI step suggestion to plan step list
+    aiSuggestions.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('add-suggestion-btn')) {
+            const li = event.target.closest('li');
+            const text = li.querySelector('span').textContent;
+            if (await addNewStep(text)) {
+                li.remove();
+            }
+        }
+    });
+
+    loadAllPlans();
+    showHome();
 });
