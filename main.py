@@ -26,7 +26,7 @@ app = FastAPI()
 
 # Gets all test plans
 @app.get("/api/plans", response_model=List[models.TestPlan])
-def show_plans(limit: int = 15, db: Session = Depends(database.get_db)):
+def show_plans(limit: int = 30, db: Session = Depends(database.get_db)):
     plans = crud.get_plans(db, limit=limit)
     return plans
 
