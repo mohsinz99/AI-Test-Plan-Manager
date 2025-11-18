@@ -31,7 +31,7 @@ A minimal Test Plan Management tool with generative AI. This application allows 
 ## Project Structure
 
 /project-root
-
+```
 │── main.py
 │── models.py
 │── crud.py
@@ -42,7 +42,7 @@ A minimal Test Plan Management tool with generative AI. This application allows 
 │   └── app.js
 ├── .env
 └── requirements.txt
-
+```
 
 ---
 
