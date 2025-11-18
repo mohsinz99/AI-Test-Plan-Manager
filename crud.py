@@ -51,8 +51,29 @@ def delete_plan(db: Session, plan_id: int):
 
 # Adds new test step to db
 def create_plan_step(db: Session, step: models.TestStepCreate, plan_id: int):
-    db_step = models.DBTestStep(text=step.text, plan_id=plan_id)
+    db_step = models.DBTestStep(text = step.text, plan_id = plan_id)
     db.add(db_step)
     db.commit()
     db.refresh(db_step)
+    return db_step
+
+# Get a single test step by ID
+def get_step(db: Session, step_id: int):
+    return db.query(models.DBTestStep).filter(models.DBTestStep.id == step_id).first()
+
+# Updates existing step with new step text
+def update_step(db: Session, step_id: int, step: models.TestStepUpdate):
+    db_step = get_step(db, step_id)
+    if db_step:
+        db_step.text = step.text
+        db.commit()
+        db.refresh(db_step)
+    return db_step
+
+# Deletes a test step by ID
+def delete_step(db: Session, step_id: int):
+    db_step = get_step(db, step_id)
+    if db_step:
+        db.delete(db_step)
+        db.commit()
     return db_step

@@ -69,6 +69,22 @@ def create_step_for_plan(plan_id: int, step: models.TestStepCreate, db: Session 
         raise HTTPException(status_code=404, detail="Test Plan not found")
     return crud.create_plan_step(db=db, step=step, plan_id=plan_id)
 
+# Updates existing test step
+@app.put("/api/steps/{step_id}", response_model = models.TestStep)
+def update_step(step_id: int, step: models.TestStepUpdate, db: Session = Depends(database.get_db)):
+    db_step = crud.update_step(db, step_id = step_id, step = step)
+    if db_step is None:
+        raise HTTPException(status_code = 404, detail="Test Step not found")
+    return db_step
+
+# Deletes a test step by ID
+@app.delete("/api/steps/{step_id}")
+def delete_step(step_id: int, db: Session = Depends(database.get_db)):
+    db_step = crud.delete_step(db, step_id = step_id)
+    if db_step is None:
+        raise HTTPException(status_code = 404, detail = "Test Step not found")
+    return "Test Step deleted"
+
 @app.get("/")
 def read_root():
     return FileResponse('static/index.html')
