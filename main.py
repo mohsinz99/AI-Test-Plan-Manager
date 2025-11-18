@@ -11,7 +11,6 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-
 import crud
 import models
 import db as database
@@ -42,6 +41,10 @@ def read_plan(plan_id: int, db: Session = Depends(database.get_db)):
         raise HTTPException(status_code = 404, detail = "Test Plan not found")
     return db_plan
 
-# @app.get("/")
-# def read_root():
-#     return {"Test": "Plan"}
+# Creates a new test step for a test plan
+@app.post("/api/plans/{plan_id}/steps", response_model=models.TestStep)
+def create_step_for_plan(plan_id: int, step: models.TestStepCreate, db: Session = Depends(database.get_db)):
+    db_plan = crud.get_plan(db, plan_id=plan_id)
+    if db_plan is None:
+        raise HTTPException(status_code=404, detail="Test Plan not found")
+    return crud.create_plan_step(db=db, step=step, plan_id=plan_id)

@@ -26,3 +26,11 @@ def create_plan(db: Session, plan: models.TestPlanCreate):
     db.commit()
     db.refresh(db_plan)
     return db_plan
+
+# Adds new test step to db
+def create_plan_step(db: Session, step: models.TestStepCreate, plan_id: int):
+    db_step = models.DBTestStep(text=step.text, plan_id=plan_id)
+    db.add(db_step)
+    db.commit()
+    db.refresh(db_step)
+    return db_step
